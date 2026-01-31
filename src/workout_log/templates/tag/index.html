@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Tags{% endblock %}
+{% block content %}
+    <a href="{% url 'tag:create' %}">Create</a>
+    {% if tags %}
+        <ul>
+            {% for tag in tags %}
+                <li>
+                    <a href="{% url 'tag:show' tag.id %}">{{ tag.name }}</a>
+                    <a href="{% url 'tag:edit' tag.id %}">Edit</a>
+                    <a href="{% url 'tag:destroy' tag.id %}">Delete</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

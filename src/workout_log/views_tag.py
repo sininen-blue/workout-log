@@ -8,67 +8,64 @@ from .models import Tag
 
 
 def index(request: HttpRequest) -> HttpResponse:
-    exercises: QuerySet[Tag] = Tag.objects.all()
+    tags: QuerySet[Tag] = Tag.objects.all()
 
     context: dict[str, object] = {
-        "exercises": exercises,
+        "tags": tags,
     }
-    return render(request, "exercise/index.html", context)
+    return render(request, "tag/index.html", context)
 
 
 def create(request: HttpRequest) -> HttpResponse:
-    return render(request, "exercise/create.html")
+    return render(request, "tag/create.html")
 
 
 def store(request: HttpRequest) -> HttpResponse:
     name: str = request.POST.get("name")
-    notes: Optional[str] = request.POST.get("notes")
 
     try:
         Tag.objects.create(
             name=name,
-            notes=notes
         )
     except Exception as e:
-        messages.error(request, "exercise creation error: " + str(e))
-        return redirect("exercise:index")
+        messages.error(request, "tag creation error: " + str(e))
+        return redirect("tag:index")
 
-    return redirect("exercise:index")
-
-
-def show(request: HttpRequest, exercise_id: int) -> HttpResponse:
-    exercise: Tag = get_object_or_404(Tag, pk=exercise_id)
-
-    context: dict[str, object] = {
-        "exercise": exercise
-    }
-
-    return render(request, "exercise/show.html", context)
+    return redirect("tag:index")
 
 
-def edit(request: HttpRequest, exercise_id: int) -> HttpResponse:
-    exercise: Tag = get_object_or_404(Tag, pk=exercise_id)
+def show(request: HttpRequest, tag_id: int) -> HttpResponse:
+    tag: Tag = get_object_or_404(Tag, pk=tag_id)
 
     context: dict[str, object] = {
-        "exercise": exercise
+        "tag": tag
     }
-    return render(request, "exercise/edit.html", context)
+
+    return render(request, "tag/show.html", context)
 
 
-def update(request: HttpRequest, exercise_id: int) -> HttpResponse:
+def edit(request: HttpRequest, tag_id: int) -> HttpResponse:
+    tag: Tag = get_object_or_404(Tag, pk=tag_id)
+
+    context: dict[str, object] = {
+        "tag": tag
+    }
+    return render(request, "tag/edit.html", context)
+
+
+def update(request: HttpRequest, tag_id: int) -> HttpResponse:
     name: Optional[str] = request.POST.get("name")
     notes: Optional[str] = request.POST.get("notes")
 
-    exercise: Tag = get_object_or_404(Tag, pk=exercise_id)
-    exercise.name = name
-    exercise.notes = notes
-    exercise.save()
+    tag: Tag = get_object_or_404(Tag, pk=tag_id)
+    tag.name = name
+    tag.save()
 
-    return redirect("exercise:index")
+    return redirect("tag:index")
 
 
-def destroy(request: HttpRequest, exercise_id: int) -> HttpResponse:
-    exercise: Tag = get_object_or_404(Tag, pk=exercise_id)
-    exercise.delete()
+def destroy(request: HttpRequest, tag_id: int) -> HttpResponse:
+    tag: Tag = get_object_or_404(Tag, pk=tag_id)
+    tag.delete()
 
-    return redirect("exercise:index")
+    return redirect("tag:index")
