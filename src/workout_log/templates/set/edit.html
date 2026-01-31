@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Edit Set{% endblock %}
+{% block content %}
+    <h1>Edit Set</h1>
+    <form action="{% url 'set:update' set.id %}" method="post">
+        {% csrf_token %}
+        <input type="number"
+               id="weight"
+               name="weight"
+               value="{{ set.weight }}"
+               required>
+        <label for="reps">Reps:</label>
+        <input type="number" id="reps" name="reps" value="{{ set.reps }}" required>
+        <input type="submit" value="Create">
+        <input type="submit" value="Create">
+    </form>
+{% endblock %}

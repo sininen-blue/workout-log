@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Daily Log{% endblock %}
+{% block content %}
+    {% if tags %}
+        <ul>
+            {% for tag in tags %}
+                <li>
+                    <a href="{% url 'tag:show' tag.id %}">{{ tag.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if sets %}
+        <ul>
+            {% for set in sets %}
+                <li>
+                    <p>{{ set.exercise.name }}</p>
+                    <p>{{ set.weight }}</p>
+                    <p>{{ set.reps }}</p>
+                    <a href="{% url 'set:edit' set.id %}">Edit</a>
+                    <a href="{% url 'set:destroy' set.id %}">Remove</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
