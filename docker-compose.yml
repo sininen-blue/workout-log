@@ -1,0 +1,18 @@
+services:
+  web:
+    build: .
+    container_name: workout-log
+    volumes:
+      - ./static:/app/staticfiles
+    env_file:
+    - .env
+
+  proxy:
+    image: nginx:latest
+    ports:
+      - "8000:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./static:/static:ro
+    depends_on:
+      - web
