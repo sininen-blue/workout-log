@@ -1,19 +1,30 @@
 <!DOCTYPE>
 <html>
-
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>{% block title %}{% endblock %}</title>
-
-	{% load static %}
-	<link rel="stylesheet" href="{% static 'workout_log/static/reset.css' %}">
-</head>
-
-<body>
-	<main>
-		{% block content %}{% endblock %}
-	</main>
-</body>
-
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block title %}{% endblock %}
+        </title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'workout_log/static/reset.css' %}">
+    </head>
+    <body>
+        <nav>
+            <ul>
+                <li>
+                    <a href="{% url 'set:index' %}">Today</a>
+                </li>
+                <li>
+                    <a href="{% url 'exercise:index' %}">Exercises</a>
+                </li>
+                <li>
+                    <a href="{% url 'tag:index' %}">Tags</a>
+                </li>
+            </ul>
+        </nav>
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+    </body>
 </html>
