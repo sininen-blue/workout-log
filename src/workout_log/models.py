@@ -17,7 +17,7 @@ class ExerciseTagMap(models.Model):
 
 
 class Set(models.Model):
-    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
+    exercise = models.ForeignKey(Exercise, default=0, on_delete=models.CASCADE)
     weight = models.IntegerField()
     reps = models.IntegerField()
 
