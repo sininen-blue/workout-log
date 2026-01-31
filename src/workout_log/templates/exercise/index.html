@@ -11,6 +11,16 @@
 		<a href="{% url 'exercise:show' exercise.id %}">{{ exercise.name }}</a>
 		<p>{{ exercise.notes }}</p>
 
+		<p>Tags:</p>
+		<ul>
+			{% for tag in exercise.tags.all %}
+			<li>
+				<p>{{ tag.name }}</p>
+			</li>
+			{% endfor %}
+		</ul>
+
+		<a href="{% url 'exercise:create_tag' exercise.id %}">Add Tags</a>
 		<a href="{% url 'exercise:edit' exercise.id %}">Edit</a>
 		<a href="{% url 'exercise:destroy' exercise.id %}">Delete</a>
 	</li>

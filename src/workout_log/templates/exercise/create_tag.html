@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Add Tag{% endblock %}
+{% block content %}
+    <h1>{{ exercise.name }}</h1>
+    {% if tags %}
+        <ul>
+            {% for tag in tags %}
+                <li>
+                    <p>{{ tag.name }}</p>
+                    <a href="{% url 'exercise:store_tag' exercise.id tag.id %}">Add</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tags available</p>
+    {% endif %}
+{% endblock %}
