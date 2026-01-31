@@ -31,4 +31,4 @@ class Set(models.Model):
     weight = models.IntegerField()
     reps = models.IntegerField()
 
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
