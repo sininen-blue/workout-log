@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Edit Exercise{% endblock %}
+
+
+{% block content %}
+<h1>Add Exercise</h1>
+<form action="{% url 'exercise:update' exercise.id %}" method="post">
+	{% csrf_token %}
+
+	<label for="name">Name:</label>
+	<input type="text" id="name" name="name" value="{{ exercise.name }}" required>
+
+	<label for="notes">Notes:</label>
+	<textarea id="notes" name="notes" rows="4" cols="50">{{ exercise.notes }}</textarea>
+
+	<input type="submit" value="Create">
+</form>
+{% endblock %}
