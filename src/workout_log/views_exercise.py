@@ -31,9 +31,10 @@ def store(request: HttpRequest) -> HttpResponse:
             name=name,
             notes=notes
         )
+    except ValueError as v:
+        messages.error(request, v)
     except Exception as e:
         messages.error(request, "exercise creation error: " + str(e))
-        return redirect("exercise:index")
 
     return redirect("exercise:index")
 
@@ -62,9 +63,14 @@ def update(request: HttpRequest, exercise_id: int) -> HttpResponse:
     notes: Optional[str] = request.POST.get("notes")
 
     exercise: Exercise = get_object_or_404(Exercise, pk=exercise_id)
-    exercise.name = name
-    exercise.notes = notes
-    exercise.save()
+    try:
+        exercise.name = name
+        exercise.notes = notes
+        exercise.save()
+    except ValueError as v:
+        messages.error(request, v)
+    except Exception as e:
+        messages.error(request, "exercise creation error: " + str(e))
 
     return redirect("exercise:index")
 
@@ -100,7 +106,10 @@ def store_tag(request: HttpRequest, exercise_id: int, tag_id: int) -> HttpRespon
     except IntegrityError:
         messages.error(request, exercise.name +
                        " already has the tag: " + tag.name)
-        return redirect("exercise:index")
+    except ValueError as v:
+        messages.error(request, v)
+    except Exception as e:
+        messages.error(request, "exercise update error: " + str(e))
 
     return redirect("exercise:index")
 
@@ -108,6 +117,11 @@ def store_tag(request: HttpRequest, exercise_id: int, tag_id: int) -> HttpRespon
 def destroy_tag(request: HttpRequest, exercise_id: int, tag_id: int) -> HttpResponse:
     exerciseTagMap: ExerciseTagMap = get_object_or_404(
         ExerciseTagMap, exercise=exercise_id, tag=tag_id)
-    exerciseTagMap.delete()
+    try:
+        exerciseTagMap.delete()
+    except ValueError as v:
+        messages.error(request, v)
+    except Exception as e:
+        messages.error(request, "exercise delete error: " + str(e))
 
     return redirect("exercise:index")

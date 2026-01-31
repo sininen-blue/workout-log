@@ -45,6 +45,8 @@ def store(request: HttpRequest) -> HttpResponse:
             weight=weight,
             reps=reps
         )
+    except ValueError as v:
+        messages.error(request, v)
     except Exception as e:
         messages.error(request, "Set creation error: " + str(e))
 
@@ -75,15 +77,25 @@ def update(request: HttpRequest, set_id: int) -> HttpResponse:
     reps: int = int(request.POST.get("reps"))
 
     exerciseSet: Set = get_object_or_404(Set, pk=set_id)
-    exerciseSet.weight = weight
-    exerciseSet.reps = reps
-    exerciseSet.save()
+    try:
+        exerciseSet.weight = weight
+        exerciseSet.reps = reps
+        exerciseSet.save()
+    except ValueError as v:
+        messages.error(request, v)
+    except Exception as e:
+        messages.error(request, "Set update error: " + str(e))
 
     return redirect("set:index")
 
 
 def destroy(request: HttpRequest, set_id: int) -> HttpResponse:
     exerciseSet: Set = get_object_or_404(Set, pk=set_id)
-    exerciseSet.delete()
+    try:
+        exerciseSet.delete()
+    except ValueError as v:
+        messages.error(request, v)
+    except Exception as e:
+        messages.error(request, "Set delete error: " + str(e))
 
     return redirect("set:index")

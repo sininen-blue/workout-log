@@ -27,9 +27,10 @@ def store(request: HttpRequest) -> HttpResponse:
         Tag.objects.create(
             name=name,
         )
+    except ValueError as v:
+        messages.error(request, v)
     except Exception as e:
-        messages.error(request, "tag creation error: " + str(e))
-        return redirect("tag:index")
+        messages.error(request, "Tag creation error: " + str(e))
 
     return redirect("tag:index")
 
@@ -55,17 +56,26 @@ def edit(request: HttpRequest, tag_id: int) -> HttpResponse:
 
 def update(request: HttpRequest, tag_id: int) -> HttpResponse:
     name: Optional[str] = request.POST.get("name")
-    notes: Optional[str] = request.POST.get("notes")
 
     tag: Tag = get_object_or_404(Tag, pk=tag_id)
-    tag.name = name
-    tag.save()
+    try:
+        tag.name = name
+        tag.save()
+    except ValueError as v:
+        messages.error(request, v)
+    except Exception as e:
+        messages.error(request, "Tag update error: " + str(e))
 
     return redirect("tag:index")
 
 
 def destroy(request: HttpRequest, tag_id: int) -> HttpResponse:
     tag: Tag = get_object_or_404(Tag, pk=tag_id)
-    tag.delete()
+    try:
+        tag.delete()
+    except ValueError as v:
+        messages.error(request, v)
+    except Exception as e:
+        messages.error(request, "Tag delete error: " + str(e))
 
     return redirect("tag:index")
