@@ -3,4 +3,12 @@
 {% block content %}
     <h1>{{ tag.name }}</h1>
     <p>{{ tag.notes }}</p>
+    <ul>
+        {% for exercise in tag.exercises.all %}
+            <li>
+                <p>{{ exercise.name }}</p>
+                <a href="{% url 'set:create' exercise.id %}">Add Set</a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

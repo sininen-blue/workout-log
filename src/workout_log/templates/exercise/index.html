@@ -1,31 +1,26 @@
 {% extends 'base.html' %}
 {% block title %}Exercises{% endblock %}
-
 {% block content %}
-<a href="{% url 'exercise:create' %}">Create</a>
-
-{% if exercises %}
-<ul>
-	{% for exercise in exercises %}
-	<li>
-		<a href="{% url 'exercise:show' exercise.id %}">{{ exercise.name }}</a>
-		<p>{{ exercise.notes }}</p>
-
-		<p>Tags:</p>
-		<ul>
-			{% for tag in exercise.tags.all %}
-			<li>
-				<p>{{ tag.name }}</p>
-			</li>
-			{% endfor %}
-		</ul>
-
-		<a href="{% url 'exercise:create_tag' exercise.id %}">Add Tags</a>
-		<a href="{% url 'exercise:edit' exercise.id %}">Edit</a>
-		<a href="{% url 'exercise:destroy' exercise.id %}">Delete</a>
-	</li>
-	{% endfor %}
-</ul>
-{% endif %}
-
+    <a href="{% url 'exercise:create' %}">Create</a>
+    {% if exercises %}
+        <ul>
+            {% for exercise in exercises %}
+                <li>
+                    <a href="{% url 'exercise:show' exercise.id %}">{{ exercise.name }}</a>
+                    <p>{{ exercise.notes }}</p>
+                    <p>Tags:</p>
+                    <ul>
+                        {% for tag in exercise.tags.all %}
+                            <li>
+                                <p>{{ tag.name }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'exercise:create_tag' exercise.id %}">Add Tags</a>
+                    <a href="{% url 'exercise:edit' exercise.id %}">Edit</a>
+                    <a href="{% url 'exercise:destroy' exercise.id %}">Delete</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
