@@ -1,24 +1,33 @@
 {% extends 'base.html' %}
 {% block title %}Exercises{% endblock %}
 {% block content %}
-    <a href="{% url 'exercise:create' %}">Create</a>
+    <a class="h-20 w-20 bg-stone-200 flex items-center justify-center mb-4"
+       href="{% url 'exercise:create' %}">Create</a>
     {% if exercises %}
-        <ul>
+        <ul class="flex flex-col gap-2">
             {% for exercise in exercises %}
-                <li>
-                    <a href="{% url 'exercise:show' exercise.id %}">{{ exercise.name }}</a>
-                    <p>{{ exercise.notes }}</p>
-                    <p>Tags:</p>
-                    <ul>
-                        {% for tag in exercise.tags.all %}
-                            <li>
-                                <p>{{ tag.name }}</p>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    <a href="{% url 'exercise:create_tag' exercise.id %}">Add Tags</a>
-                    <a href="{% url 'exercise:edit' exercise.id %}">Edit</a>
-                    <a href="{% url 'exercise:destroy' exercise.id %}">Delete</a>
+                <li class="flex flex-row justify-between">
+                    <section class="flex flex-row gap-2">
+                        <div class="flex flex-col justify-between">
+                            <a class="text-lg p-2" href="{% url 'exercise:show' exercise.id %}">{{ exercise.name }}</a>
+                            <p>{{ exercise.notes }}</p>
+                        </div>
+                        <ul>
+                            {% for tag in exercise.tags.all %}
+                                <li>
+                                    <p>{{ tag.name }}</p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                    <div class="flex flex-col gap-1">
+                        <a class="h-12 flex items-center justify-center"
+                           href="{% url 'exercise:create_tag' exercise.id %}">Add Tags</a>
+                        <a class="h-12 flex items-center justify-center"
+                           href="{% url 'exercise:edit' exercise.id %}">Edit</a>
+                        <a class="h-12 flex items-center justify-center"
+                           href="{% url 'exercise:destroy' exercise.id %}">Delete</a>
+                    </div>
                 </li>
             {% endfor %}
         </ul>
