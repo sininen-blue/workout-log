@@ -1,7 +1,7 @@
 /* 1. Use a more-intuitive box-sizing model */
-* {
-  outline: 1px solid red;
-}
+/* * { */
+/*   outline: 1px solid red; */
+/* } */
 
 *,
 *::before,
