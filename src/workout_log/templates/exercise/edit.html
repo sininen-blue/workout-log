@@ -3,8 +3,8 @@
 
 
 {% block content %}
-<h1>Add Exercise</h1>
-<form action="{% url 'exercise:update' exercise.id %}" method="post">
+<h1 class="w-full">Edit Exercise</h1>
+<form class="w-full flex flex-col gap-2" action="{% url 'exercise:update' exercise.id %}" method="post">
 	{% csrf_token %}
 
 	<label for="name">Name:</label>
