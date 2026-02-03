@@ -4,11 +4,11 @@
 	{% url 'exercise:create' as create %}
 	{% include "../components/button.html" with url=create label="Create" %}
     {% if exercises %}
-        <ul class="flex flex-col gap-2">
+        <ul class="flex flex-col gap-2 mt-2">
             {% for exercise in exercises %}
-                <li class="flex flex-row justify-between">
+                <li class="bg-stone-200 p-4 flex flex-row justify-between">
                     <section class="flex flex-row gap-2">
-                        <div class="flex flex-col justify-between">
+                        <div class="flex flex-col">
                             <a class="text-lg p-2" href="{% url 'exercise:show' exercise.id %}">{{ exercise.name }}</a>
                             <p>{{ exercise.notes }}</p>
                         </div>
