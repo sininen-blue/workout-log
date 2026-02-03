@@ -4,15 +4,12 @@
 
 {% block content %}
 <h1>Add Exercise</h1>
-<form action="{% url 'exercise:store' %}" method="post">
+<form class="flex flex-col gap-2" action="{% url 'exercise:store' %}" method="post">
 	{% csrf_token %}
 
-	<label for="name">Name:</label>
-	<input type="text" id="name" name="name" required>
+	{% include "../components/input_text.html" with name="name" label="Name" %}
+	{% include "../components/textarea.html" with name="notes" label="Notes" %}
 
-	<label for="notes">Notes:</label>
-	<textarea id="notes" name="notes" rows="4" cols="50"></textarea>
-
-	<input type="submit" value="Create">
+	{% include "../components/input_button.html" %}
 </form>
 {% endblock %}
