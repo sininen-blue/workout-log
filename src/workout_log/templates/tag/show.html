@@ -8,6 +8,7 @@
             <li class="bg-stone-200 flex flex-row items-center justify-between p-2">
                 <div class="flex flex-col gap-2">
                     <p class="text-lg">{{ exercise.name }}</p>
+                    <p>{{ exercise.notes }}</p>
                     <ul class="flex flex-row gap-2">
                         {% for tag in exercise.tags.all %}
                             <li>
