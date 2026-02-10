@@ -27,12 +27,14 @@
         <nav class="relative">
             <div class="absolute inset-x-0 top-0 h-3/4 bg-stone-600"></div>
             <ul class="relative w-auto mx-4 mb-6 flex flex-row gap-4">
-                {% url 'set:index' as set_url %}
-                {% include "components/nav_button.html" with url=set_url label="Today" %}
+                {% url 'day:index' as day_url %}
+                {% include "components/nav_button.html" with url=day_url label="Today" %}
                 {% url 'exercise:index' as exercise_url %}
                 {% include "components/nav_button.html" with url=exercise_url label="Exercises" %}
                 {% url 'tag:index' as tag_url %}
                 {% include "components/nav_button.html" with url=tag_url label="Tags" %}
+                {% url 'set:index' as set_url %}
+                {% include "components/nav_button.html" with url=set_url label="Sets" %}
             </ul>
         </nav>
         <main class="flex flex-col items-stretch px-4 w-full">

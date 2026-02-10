@@ -9,7 +9,12 @@
                 <div class="flex flex-col gap-2">
                     <p class="text-lg">{{ exercise.name }}</p>
                     <ul class="flex flex-row gap-2">
-                        {% for tag in exercise.tags.all %}<li>{{ tag.name }}</li>{% endfor %}
+                        {% for tag in exercise.tags.all %}
+                            <li>
+                                {% url 'tag:show' tag.id as tag_show %}
+                                {% include 'components/button.html' with url=tag_show label=tag.name %}
+                            </li>
+                        {% endfor %}
                     </ul>
                 </div>
                 <a href="{% url 'set:create' exercise.id %}"
