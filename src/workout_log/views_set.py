@@ -27,8 +27,13 @@ def index(request: HttpRequest) -> HttpResponse:
 def create(request: HttpRequest, exercise_id: int) -> HttpResponse:
     exercise: Exercise = get_object_or_404(Exercise, pk=exercise_id)
 
+    latestSet: Set = Set.objects.order_by("-date")
+    latestSet = latestSet.filter(exercise=exercise)
+    latestSet = latestSet.first()
+
     context: dict[str, object] = {
-        "exercise": exercise
+        "exercise": exercise,
+        "latestSet": latestSet
     }
     return render(request, "set/create.html", context)
 
