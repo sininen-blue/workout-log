@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}Exercises{% endblock %}
 {% block content %}
-	{% url 'exercise:create' as create %}
-	{% include "../components/button.html" with url=create label="Create" %}
+    {% url 'exercise:create' as create %}
+    {% include "../components/button.html" with url=create label="Create" %}
     {% if exercises %}
         <ul class="flex flex-col gap-2 mt-2">
             {% for exercise in exercises %}
@@ -14,8 +14,10 @@
                         </div>
                         <ul>
                             {% for tag in exercise.tags.all %}
-                                <li>
+                                <li class="p-2 bg-stone-400 flex items-center justify-between gap-2">
                                     <p>{{ tag.name }}</p>
+                                    {% url 'exercise:destroy_tag' exercise.id tag.id as destroy_tag %}
+                                    {% include "../components/button.html" with url=destroy_tag label="Delete" %}
                                 </li>
                             {% endfor %}
                         </ul>
