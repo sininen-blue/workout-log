@@ -48,7 +48,7 @@ def store(request: HttpRequest) -> HttpResponse:
     except Exception as e:
         messages.error(request, "Set creation error: " + str(e))
 
-    return redirect("set:index")
+    return redirect("day:index")
 
 
 def show(request: HttpRequest, exercise_id: int) -> HttpResponse:
@@ -67,7 +67,7 @@ def edit(request: HttpRequest, set_id: int) -> HttpResponse:
     context: dict[str, object] = {
         "set": exerciseSet
     }
-    return render(request, "set/edit.html", context)
+    return render(request, "day/edit.html", context)
 
 
 def update(request: HttpRequest, set_id: int) -> HttpResponse:
@@ -84,7 +84,7 @@ def update(request: HttpRequest, set_id: int) -> HttpResponse:
     except Exception as e:
         messages.error(request, "Set update error: " + str(e))
 
-    return redirect("set:index")
+    return redirect("day:index")
 
 
 def destroy(request: HttpRequest, set_id: int) -> HttpResponse:
@@ -96,4 +96,4 @@ def destroy(request: HttpRequest, set_id: int) -> HttpResponse:
     except Exception as e:
         messages.error(request, "Set delete error: " + str(e))
 
-    return redirect("set:index")
+    return redirect("day:index")
