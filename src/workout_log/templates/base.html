@@ -22,9 +22,10 @@
         <link rel="stylesheet" href="{% static 'css/reset.css' %}">
         <link rel="stylesheet" href="{% static 'css/output.css' %}">
         <script defer src="{% static 'js/alpine3.15.8.js' %}"></script>
-        <script defer src="{% static 'js/htmx2.0.8.js' %}"></script>
+        <script src="{% static 'js/htmx2.0.8.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
     </head>
-    <body hx-boost="true" class="bg-stone-100">
+    <body class="bg-stone-100">
         <nav class="relative">
             <div class="absolute inset-x-0 top-0 h-3/4 bg-stone-600"></div>
             <ul class="relative w-auto mx-4 mb-6 flex flex-row gap-4">
@@ -36,6 +37,8 @@
                 {% include "components/nav_button.html" with url=tag_url label="Tags" %}
                 {% url 'set:index' as set_url %}
                 {% include "components/nav_button.html" with url=set_url label="Sets" %}
+                {% url 'statistics:index' as statistics_url %}
+                {% include "components/nav_button.html" with url=statistics_url label="Stats" %}
             </ul>
         </nav>
         <main class="flex flex-col items-stretch px-4 w-full">
@@ -48,5 +51,6 @@
             {% endif %}
             {% block content %}{% endblock %}
         </main>
+        {% block scripts %}{% endblock %}
     </body>
 </html>

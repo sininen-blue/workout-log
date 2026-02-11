@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Stats{% endblock %}
+{% block content %}
+    <label for="exercise">Select an exercise</label>
+    <select hx-get="{% url 'statistics:weight_chart' %}"
+            hx-trigger="change"
+            hx-target="#charts"
+            hx-swap="outerHTML"
+            class="border"
+            name="exercise"
+            id="exercise">
+        {% for exercise in exercises %}
+            <option value={{ exercise.id }}>{{ exercise.name }}
+            </option>
+        {% endfor %}
+    </select>
+    <section id="charts">
+        <canvas id="weight-chart"></canvas>
+    </section>
+{% endblock %}
+{% block scripts %}
+    <script>
+	function initChart() {
+		const ctx = document.getElementById("weight-chart");
+		if (!ctx) return;
+
+		new Chart(ctx, {
+			type: 'line',
+			data: {
+				labels: [{% for set in sets %}"{{ set.date }}",{% endfor %}],
+				datasets: [{
+					label: 'Weight',
+					data: [{% for set in sets %}{{ set.weight }},{% endfor %}],
+				}]
+			}
+		});
+	}
+
+	document.addEventListener("DOMContentLoaded", initChart);
+	document.body.addEventListener("htmx:afterSwap", initChart);
+    </script>
+{% endblock %}
