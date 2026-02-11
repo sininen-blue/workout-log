@@ -7,10 +7,15 @@
           method="post">
         {% csrf_token %}
         <input type="hidden" id="id" name="id" value="{{ exercise.id }}">
-        <div class="flex flex-col gap-1">
+        <div x-data="{ increment: 5}" class="flex flex-col gap-1">
             <label for="weight">Weight:</label>
-            <div x-data="{ weight: {{ latestSet.weight }} }"
-                 class="flex flex-row justify-between gap-2">
+            <div x-data="{ weight:
+                {% if latestSet %}
+                    {{ latestSet.weight }}
+                {% else %}
+                    0
+                {% endif %}
+                }" class="flex flex-row justify-between gap-2">
                 <input x-model="weight"
                        class="bg-stone-200 h-20 text-4xl p-2"
                        type="number"
@@ -18,15 +23,38 @@
                        name="weight"
                        required>
                 <div class="flex flex-row gap-2">
-                    <button x-on:click="weight++" type="button" class="bg-stone-200 w-20 h-20">Up</button>
-                    <button x-on:click="weight--" type="button" class="bg-stone-200 w-20 h-20">Down</button>
+                    <button x-on:click="weight+=increment"
+                            type="button"
+                            class="bg-stone-200 w-20 h-20">Up</button>
+                    <button x-on:click="weight-=increment"
+                            type="button"
+                            class="bg-stone-200 w-20 h-20">Down</button>
                 </div>
+            </div>
+            <div class="flex flex-row gap-2">
+                <button x-on:click="increment = 1"
+                        x-bind:class="increment == 1 ? 'border-blue-500' : ''"
+                        type="button"
+                        class="border bg-stone-200 w-20 h-20">1</button>
+                <button x-on:click="increment = 5"
+                        x-bind:class="increment == 5 ? 'border-blue-500' : ''"
+                        type="button"
+                        class="border bg-stone-200 w-20 h-20">5</button>
+                <button x-on:click="increment = 10"
+                        x-bind:class="increment == 10 ? 'border-blue-500' : ''"
+                        type="button"
+                        class="border bg-stone-200 w-20 h-20">10</button>
             </div>
         </div>
         <div class="flex flex-col gap-1">
             <label for="reps">Reps:</label>
-            <div x-data="{ reps: {{ latestSet.reps }} }"
-                 class="flex flex-row justify-between gap-2">
+            <div x-data="{ reps:
+                {% if latestSet %}
+                    {{ latestSet.reps }}
+                {% else %}
+                    0
+                {% endif %}
+                }" class="flex flex-row justify-between gap-2">
                 <input x-model="reps"
                        class="bg-stone-200 h-20 text-4xl p-2"
                        type="number"
