@@ -1,3 +1,5 @@
-<section id="charts">
-	<canvas id="weight-chart"></canvas>
-</section>
+<canvas x-data="{ labels: [
+    {% for set in sets %}'{{ set.date }}',{% endfor %}
+    ], data: [
+    {% for set in sets %}{{ set.weight }},{% endfor %}
+] }" x-init=" chart = new Chart($el, { type: 'line', data: { labels: labels, datasets: [{ label: 'Weight', data: data, }] }, }); " id="weight-chart"></canvas>

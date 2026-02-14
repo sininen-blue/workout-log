@@ -3,3 +3,4 @@ gunicorn==24.1.1
 whitenoise==6.11.0
 whitenoise[brotli]==6.11.0
 python-dotenv==1.2.1
+django-htmx==1.27.0

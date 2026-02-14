@@ -2,10 +2,13 @@
 {% block title %}Stats{% endblock %}
 {% block content %}
     <label for="exercise">Select an exercise</label>
+    TODO: probably fully replace with alpine
+    x data with the data from server render
+    then the script is just here
     <select hx-get="{% url 'statistics:weight_chart' %}"
             hx-trigger="change"
             hx-target="#charts"
-            hx-swap="outerHTML"
+            hx-swap="innerHTML"
             class="border"
             name="exercise"
             id="exercise">
@@ -15,28 +18,6 @@
         {% endfor %}
     </select>
     <section id="charts">
-        <canvas id="weight-chart"></canvas>
+        {% include "./components/weight_chart.html" %}
     </section>
-{% endblock %}
-{% block scripts %}
-    <script>
-	function initChart() {
-		const ctx = document.getElementById("weight-chart");
-		if (!ctx) return;
-
-		new Chart(ctx, {
-			type: 'line',
-			data: {
-				labels: [{% for set in sets %}"{{ set.date }}",{% endfor %}],
-				datasets: [{
-					label: 'Weight',
-					data: [{% for set in sets %}{{ set.weight }},{% endfor %}],
-				}]
-			}
-		});
-	}
-
-	document.addEventListener("DOMContentLoaded", initChart);
-	document.body.addEventListener("htmx:afterSwap", initChart);
-    </script>
 {% endblock %}

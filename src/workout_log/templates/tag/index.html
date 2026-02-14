@@ -1,17 +1,53 @@
 {% extends 'base.html' %}
 {% block title %}Tags{% endblock %}
 {% block content %}
-	{% url 'tag:create' as create %}
-	{% include "../components/button.html" with url=create label="Create" %}
-    {% if tags %}
-        <ul>
+    {% partialdef tag_page inline %}
+    <div class="mb-4">
+        {% url 'tag:create' as create %}
+        {% include "../components/button.html" with url=create label="Create" %}
+    </div>
+    <div id="tag-list">
+        <ul class="flex flex-col gap-4">
             {% for tag in tags %}
-                <li>
-                    <a href="{% url 'tag:show' tag.id %}">{{ tag.name }}</a>
-                    <a href="{% url 'tag:edit' tag.id %}">Edit</a>
-                    <a href="{% url 'tag:destroy' tag.id %}">Delete</a>
+                {% partialdef tag_card inline %}
+                <li id="tag-card" class="bg-stone-200 p-4 flex flex-row justify-between">
+                    <p class="font-lg font-semibold">{{ tag.name }}</p>
+                    <div class="flex flex-row gap-4">
+                        <button class="text-black"
+                                hx-get="{% url 'tag:edit' tag.id %}"
+                                hx-target="closest #tag-card"
+                                hx-swap="outerHTML">Edit</button>
+                        <button class="text-red-400"
+                                hx-delete="{% url 'tag:destroy' tag.id %}"
+                                hx-target="closest #tag-card"
+                                hx-swap="outerHTML">Delete</button>
+                    </div>
                 </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+            {% endpartialdef %}
+        {% endfor %}
+    </ul>
+</div>
+{% endpartialdef %}
 {% endblock %}
+{% partialdef tag_edit %}
+<li id="tag-card" class="bg-stone-200 p-4 flex flex-row justify-between">
+    <form id="edit-form">
+        <input class="bg-stone-200 border-b-1 border-stone-400"
+               type="text"
+               name="name"
+               value="{{ tag.name }}"
+               required>
+    </form>
+    <div class="flex flex-row gap-4">
+        <button class="text-green-700"
+                hx-put="{% url 'tag:update' tag.id %}"
+                hx-target="closest #tag-card"
+                hx-include="#edit-form"
+                hx-swap="outerHTML">Save</button>
+        <button class="text-black"
+                hx-get="{% url 'tag:show' tag.id %}"
+                hx-target="closest #tag-card"
+                hx-swap="outerHTML">Cancel</button>
+    </div>
+</li>
+{% endpartialdef %}

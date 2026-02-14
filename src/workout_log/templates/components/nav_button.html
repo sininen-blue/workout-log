@@ -1,5 +1,5 @@
 <li class="bg-stone-800 text-white">
-	<a href="{{ url }}" class="block p-4">
+	<a hx-push-url="true" hx-target="main" hx-get="{{ url }}" class="block p-4">
 		{{ label }}
 	</a>
 </li>

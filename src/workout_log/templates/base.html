@@ -1,3 +1,4 @@
+{% load django_htmx %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,10 +23,10 @@
         <link rel="stylesheet" href="{% static 'css/reset.css' %}">
         <link rel="stylesheet" href="{% static 'css/output.css' %}">
         <script defer src="{% static 'js/alpine3.15.8.js' %}"></script>
-        <script src="{% static 'js/htmx2.0.8.js' %}"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+        {% htmx_script %}
     </head>
-    <body class="bg-stone-100">
+    <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' class="bg-stone-100">
         <nav class="relative">
             <div class="absolute inset-x-0 top-0 h-3/4 bg-stone-600"></div>
             <ul class="relative w-auto mx-4 mb-6 flex flex-row gap-4">

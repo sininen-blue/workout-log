@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, QueryDict
 from django.db.models import QuerySet
 from typing import Optional
 
@@ -13,6 +13,10 @@ def index(request: HttpRequest) -> HttpResponse:
     context: dict[str, object] = {
         "tags": tags,
     }
+
+    if request.headers.get("HX-Request"):
+        return render(request, "tag/index.html#tag_page", context)
+
     return render(request, "tag/index.html", context)
 
 
@@ -42,6 +46,9 @@ def show(request: HttpRequest, tag_id: int) -> HttpResponse:
         "tag": tag
     }
 
+    if request.headers.get("HX-Request"):
+        return render(request, "tag/index.html#tag_card", context)
+
     return render(request, "tag/show.html", context)
 
 
@@ -51,11 +58,16 @@ def edit(request: HttpRequest, tag_id: int) -> HttpResponse:
     context: dict[str, object] = {
         "tag": tag
     }
+
+    if request.headers.get("HX-Request"):
+        return render(request, "tag/index.html#tag_edit", context)
+
     return render(request, "tag/edit.html", context)
 
 
 def update(request: HttpRequest, tag_id: int) -> HttpResponse:
-    name: Optional[str] = request.POST.get("name")
+    put: QueryDict = QueryDict(request.body)
+    name: Optional[str] = put.get("name")
 
     tag: Tag = get_object_or_404(Tag, pk=tag_id)
     try:
@@ -65,6 +77,12 @@ def update(request: HttpRequest, tag_id: int) -> HttpResponse:
         messages.error(request, v)
     except Exception as e:
         messages.error(request, "Tag update error: " + str(e))
+
+    context: dict[str, object] = {
+        "tag": tag
+    }
+    if request.headers.get("HX-Request"):
+        return render(request, "tag/index.html#tag_card", context)
 
     return redirect("tag:index")
 
@@ -77,5 +95,8 @@ def destroy(request: HttpRequest, tag_id: int) -> HttpResponse:
         messages.error(request, v)
     except Exception as e:
         messages.error(request, "Tag delete error: " + str(e))
+
+    if request.headers.get("HX-Request"):
+        return HttpResponse()
 
     return redirect("tag:index")
