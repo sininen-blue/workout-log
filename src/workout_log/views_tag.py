@@ -21,6 +21,8 @@ def index(request: HttpRequest) -> HttpResponse:
 
 
 def create(request: HttpRequest) -> HttpResponse:
+    if request.headers.get("HX-Request"):
+        return render(request, "tag/index.html#tag_create")
     return render(request, "tag/create.html")
 
 
@@ -28,13 +30,19 @@ def store(request: HttpRequest) -> HttpResponse:
     name: str = request.POST.get("name")
 
     try:
-        Tag.objects.create(
+        tag: Tag = Tag.objects.create(
             name=name,
         )
     except ValueError as v:
         messages.error(request, v)
     except Exception as e:
         messages.error(request, "Tag creation error: " + str(e))
+
+    context: dict[str, object] = {
+        "tag": tag
+    }
+    if request.headers.get("HX-Request"):
+        return render(request, "tag/index.html#tag_card", context)
 
     return redirect("tag:index")
 

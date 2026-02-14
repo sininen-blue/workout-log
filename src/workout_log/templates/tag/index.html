@@ -2,10 +2,6 @@
 {% block title %}Tags{% endblock %}
 {% block content %}
     {% partialdef tag_page inline %}
-    <div class="mb-4">
-        {% url 'tag:create' as create %}
-        {% include "../components/button.html" with url=create label="Create" %}
-    </div>
     <div id="tag-list">
         <ul class="flex flex-col gap-4">
             {% for tag in tags %}
@@ -13,6 +9,10 @@
             {% endfor %}
         </ul>
     </div>
+    <button class="bg-stone-200 p-4 mt-4 mx-auto w-30"
+            hx-get="{% url 'tag:create' %}"
+            hx-target="#tag-list>ul"
+            hx-swap="beforeend">Create</button>
 {% endpartialdef %}
 {% endblock %}
 {% partialdef tag_card %}
@@ -26,7 +26,29 @@
         <button class="text-red-400"
                 hx-delete="{% url 'tag:destroy' tag.id %}"
                 hx-target="closest #tag-card"
-                hx-swap="outerHTML">Delete</button>
+                hx-swap="delete">Delete</button>
+    </div>
+</li>
+{% endpartialdef %}
+{% partialdef tag_create %}
+<li id="tag-card" class="bg-stone-200 p-4 flex flex-row justify-between">
+    <form id="create-form">
+        <input class="bg-stone-200 border-b-1 border-stone-400"
+               type="text"
+               name="name"
+               value="{{ tag.name }}"
+               required>
+    </form>
+    <div class="flex flex-row gap-4">
+        <button class="text-green-700"
+                hx-post="{% url 'tag:store' %}"
+                hx-target="closest #tag-card"
+                hx-include="#create-form"
+                hx-swap="outerHTML">Save</button>
+        <button class="text-black"
+                hx-delete="#"
+                hx-target="closest #tag-card"
+                hx-swap="delete">Cancel</button>
     </div>
 </li>
 {% endpartialdef %}
