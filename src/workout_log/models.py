@@ -3,6 +3,7 @@ from django.db import models
 
 class Tag(models.Model):
     name = models.CharField()
+    active = models.BooleanField(default=True)
 
 
 class Exercise(models.Model):
@@ -26,8 +27,14 @@ class ExerciseTagMap(models.Model):
         ]
 
 
+class Session(models.Model):
+    notes = models.TextField(default="")
+
+
 class Set(models.Model):
-    exercise = models.ForeignKey(Exercise, default=0, on_delete=models.CASCADE)
+    exercise = models.ForeignKey(
+        Exercise, default=0, on_delete=models.SET_DEFAULT)
+    Session = models.ForeignKey(Session, default=0, on_delete=models.CASCADE)
     weight = models.IntegerField()
     reps = models.IntegerField()
 
