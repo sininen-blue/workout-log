@@ -6,7 +6,6 @@ from django.db.models import QuerySet
 from .models import Exercise, Set
 
 
-# TODO:
 def index(request: HttpRequest) -> HttpResponse:
     sets: QuerySet[Set] = Set.objects.order_by("-date").all()
 

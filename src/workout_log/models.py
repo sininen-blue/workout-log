@@ -42,7 +42,7 @@ class Session(models.Model):
 
 class Set(models.Model):
     exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
-    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    session = models.ForeignKey(Session, null=True, on_delete=models.CASCADE)
 
     weight = models.IntegerField(default=0)
     reps = models.IntegerField(default=0)
