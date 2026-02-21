@@ -1,9 +1,11 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Tag(models.Model):
-    name = models.CharField()
-    active = models.BooleanField(default=True)
+    name = models.CharField(default="")
+
+    highlighted = models.BooleanField(default=True)
 
 
 class Exercise(models.Model):
@@ -18,6 +20,8 @@ class ExerciseTagMap(models.Model):
     exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
 
+    active = models.BooleanField(default=True)
+
     class Meta:
         constraints = [
             models.UniqueConstraint(
@@ -29,13 +33,25 @@ class ExerciseTagMap(models.Model):
 
 class Session(models.Model):
     notes = models.TextField(default="")
+    rating = models.IntegerField(
+        default=3,
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+
+    date = models.DateTimeField(auto_now_add=True)
 
 
 class Set(models.Model):
-    exercise = models.ForeignKey(
-        Exercise, default=0, on_delete=models.SET_DEFAULT)
-    Session = models.ForeignKey(Session, default=0, on_delete=models.CASCADE)
-    weight = models.IntegerField()
-    reps = models.IntegerField()
+    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+
+    weight = models.IntegerField(default=0)
+    reps = models.IntegerField(default=0)
+
+    notes = models.TextField(default="")
+    rating = models.IntegerField(
+        default=3,
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
 
     date = models.DateTimeField(auto_now_add=True)
