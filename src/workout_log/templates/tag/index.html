@@ -25,6 +25,7 @@
                 hx-swap="outerHTML">Edit</button>
         <button class="text-red-400"
                 hx-delete="{% url 'tag:destroy' tag.id %}"
+                hx-confirm="Are you sure? Will not delete associated excercises"
                 hx-target="closest #tag-card"
                 hx-swap="delete">Delete</button>
     </div>
@@ -43,7 +44,7 @@
         <button class="text-green-700"
                 hx-post="{% url 'tag:store' %}"
                 hx-target="closest #tag-card"
-                hx-include="#create-form"
+                hx-include="previous #create-form"
                 hx-swap="outerHTML">Save</button>
         <button class="text-black"
                 hx-delete="#"
