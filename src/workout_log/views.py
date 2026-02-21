@@ -14,10 +14,15 @@ def index(request: HttpRequest) -> HttpResponse:
     sets: QuerySet[Set] = Set.objects.filter(
         date__date=today).order_by("-date")
 
-    tags: QuerySet[Tag] = Tag.objects.prefetch_related("exercises").all()
+    tags: QuerySet[Tag] = Tag.objects.filter(
+        highlighted=True).prefetch_related("exercises").all()
 
     context: dict[str, object] = {
         "tags": tags,
         "sets": sets,
     }
+
+    if request.headers.get("HX-Request"):
+        return render(request, "day/index.html#day_page", context)
+
     return render(request, "day/index.html", context)

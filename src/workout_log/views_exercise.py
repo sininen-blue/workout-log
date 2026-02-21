@@ -15,10 +15,16 @@ def index(request: HttpRequest) -> HttpResponse:
     context: dict[str, object] = {
         "exercises": exercises,
     }
+
+    if request.headers.get("HX-Request"):
+        return render(request, "exercise/index.html#exercise_page", context)
+
     return render(request, "exercise/index.html", context)
 
 
 def create(request: HttpRequest) -> HttpResponse:
+    if request.headers.get("HX-Request"):
+        return render(request, "exercise/index.html#exercise_create")
     return render(request, "exercise/create.html")
 
 
@@ -27,7 +33,7 @@ def store(request: HttpRequest) -> HttpResponse:
     notes: Optional[str] = request.POST.get("notes")
 
     try:
-        Exercise.objects.create(
+        exercise = Exercise.objects.create(
             name=name,
             notes=notes
         )
@@ -35,6 +41,12 @@ def store(request: HttpRequest) -> HttpResponse:
         messages.error(request, v)
     except Exception as e:
         messages.error(request, "exercise creation error: " + str(e))
+
+    context: dict[str, object] = {
+        "exercise": exercise
+    }
+    if request.headers.get("HX-Request"):
+        return render(request, "exercise/index.html#exercise_card", context)
 
     return redirect("exercise:index")
 
@@ -55,6 +67,10 @@ def edit(request: HttpRequest, exercise_id: int) -> HttpResponse:
     context: dict[str, object] = {
         "exercise": exercise
     }
+
+    if request.headers.get("HX-Request"):
+        return render(request, "exercise/edit.html#exercise_card", context)
+
     return render(request, "exercise/edit.html", context)
 
 

@@ -12,15 +12,14 @@ class Exercise(models.Model):
     tags = models.ManyToManyField(
         Tag, through="ExerciseTagMap", related_name="exercises")
     name = models.CharField()
-
     notes = models.TextField(default="")
+
+    active = models.BooleanField(default=False)
 
 
 class ExerciseTagMap(models.Model):
     exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
-
-    active = models.BooleanField(default=True)
 
     class Meta:
         constraints = [

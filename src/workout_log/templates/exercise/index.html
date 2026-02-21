@@ -1,37 +1,82 @@
 {% extends 'base.html' %}
 {% block title %}Exercises{% endblock %}
 {% block content %}
-    {% url 'exercise:create' as create %}
-    {% include "../components/button.html" with url=create label="Create" %}
-    {% if exercises %}
-        <ul class="flex flex-col gap-2 mt-2">
-            {% for exercise in exercises %}
-                <li class="bg-stone-200 p-4 flex flex-row justify-between">
-                    <section class="flex flex-row gap-2">
-                        <div class="flex flex-col">
-                            <a class="text-lg p-2" href="{% url 'exercise:show' exercise.id %}">{{ exercise.name }}</a>
-                            <p>{{ exercise.notes }}</p>
-                        </div>
-                        <ul>
-                            {% for tag in exercise.tags.all %}
-                                <li class="p-2 bg-stone-400 flex items-center justify-between gap-2">
-                                    <p>{{ tag.name }}</p>
-                                    {% url 'exercise:destroy_tag' exercise.id tag.id as destroy_tag %}
-                                    {% include "../components/button.html" with url=destroy_tag label="Delete" %}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </section>
-                    <div class="flex flex-col gap-1">
-                        <a class="h-12 flex items-center justify-center"
-                           href="{% url 'exercise:create_tag' exercise.id %}">Add Tags</a>
-                        <a class="h-12 flex items-center justify-center"
-                           href="{% url 'exercise:edit' exercise.id %}">Edit</a>
-                        <a class="h-12 flex items-center justify-center"
-                           href="{% url 'exercise:destroy' exercise.id %}">Delete</a>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+	{% partialdef exercise_page inline %}
+	<div id="exercise-list">
+		<ul class="flex flex-col gap-4">
+			{% for exercise in exercises %}
+				{% partial exercise_card %}
+			{% endfor %}
+		</ul>
+	</div>
+    <button class="bg-stone-200 p-4 mt-4 mx-auto w-30"
+            hx-get="{% url 'exercise:create' %}"
+            hx-target="#exercise-list>ul"
+            hx-swap="beforeend">Create</button>
+	{% endpartialdef %}
 {% endblock %}
+
+
+
+{% partialdef exercise_card %}
+<li id="exercise-card" class="bg-stone-200 p-4 flex flex-row justify-between">
+	<section class="flex flex-row gap-2">
+		<div class="flex flex-col">
+			<p>{{ exercise.name }}</p>
+		</div
+		<ul>
+			{% for tag in exercise.tags.all %}
+				{% partial tag %}
+			{% endfor %}
+		</ul>
+	</section>
+	<div class="flex flex-col gap-1">
+		<a class="h-12 flex items-center justify-center"
+		   href="{% url 'exercise:create_tag' exercise.id %}">Add Tags</a>
+        <button class="text-black"
+                hx-get="{% url 'exercise:edit' exercise.id %}"
+                hx-target="closest #exercise-card"
+                hx-swap="outerHTML">Edit</button>
+        <button class="text-red-400"
+                hx-delete="{% url 'tag:destroy' exercise.id %}"
+                hx-confirm="Are you sure? Will delete associated sets excercises"
+                hx-target="closest #tag-card"
+                hx-swap="delete">Delete</button>
+	</div>
+</li>
+{% endpartialdef %}
+
+
+
+{% partialdef tag %}
+<li class="p-2 bg-stone-400 flex items-center justify-between gap-2">
+	<p>{{ tag.name }}</p>
+	{% url 'exercise:destroy_tag' exercise.id tag.id as destroy_tag %}
+	{% include "../components/button.html" with url=destroy_tag label="Delete" %}
+</li>
+{% endpartialdef %}
+
+
+{% partialdef exercise_create %}
+<li id="exercise-card" class="bg-stone-200 p-4 flex flex-row justify-between">
+    <form id="create-form">
+        <input class="bg-stone-200 border-b-1 border-stone-400"
+               type="text"
+               name="name"
+               value="{{ exercise.name }}"
+               required>
+		<textarea name="notes" rows="4" cols="50">{{ exercise.notes }}</textarea>
+    </form>
+    <div class="flex flex-row gap-4">
+        <button class="text-green-700"
+                hx-post="{% url 'exercise:store' %}"
+                hx-target="closest #exercise-card"
+                hx-include="previous #create-form"
+                hx-swap="outerHTML">Save</button>
+        <button class="text-black"
+                hx-delete="#"
+                hx-target="closest #exercise-card"
+                hx-swap="delete">Cancel</button>
+    </div>
+</li>
+{% endpartialdef %}
