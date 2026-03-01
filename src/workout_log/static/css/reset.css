@@ -37,6 +37,15 @@ select {
   align-items: center;
 }
 
+.grow {
+  flex-grow: 1;
+}
+
+.right {
+  width: fit-content;
+  margin-left: auto;
+}
+
 .danger {
   border-color: var(--pico-color-red-450);
   color: var(--pico-color-red-450);
@@ -70,5 +79,20 @@ select {
   gap: 2rem;
 }
 .set-card-header > h3, .set-card-header > p {
+  margin: 0;
+}
+
+.exercise-tag {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+
+  width: fit-content;
+  padding: 0.25rem;
+  margin: 0;
+
+  background-color: var(--pico-color-azure-150);
+}
+.exercise-tag > p {
   margin: 0;
 }
