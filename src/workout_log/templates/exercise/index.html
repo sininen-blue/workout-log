@@ -14,12 +14,19 @@
 
         <hr>
 
-        <!-- TODO: just make this pull everytime something gets changed -->
-        <section id="exercise-list">
+        {% partialdef exercise_list inline %}
+        <section id="exercise-list" 
+                hx-get="{% url 'exercise_partials:list' %}"
+                hx-target="this"
+                hx-swap="outerHTML"
+                hx-trigger="reload-list from:body"
+        >
                 {% for exercise in exercises %}
                         {% partial exercise_card %}
                 {% endfor %}
         </section>
+        {% endpartialdef %}
+
         {% endpartialdef %}
 {% endblock %}
 
@@ -28,6 +35,7 @@
 <article id="exercise-card" class="flex-apart">
         <div class="grow">
                 <h3>{{ exercise.name }}</h3>
+                <p>{{ exercise.notes }}</p>
                 <div>
                         {% for tag in exercise.tags.all %}
                                 {% partial tag %}
@@ -36,17 +44,19 @@
         </div>
         <div class="flex flex-col gap-1">
                 <button class="outline primary"
-                        hx-get="{% url 'exercise:create_tag' exercise.id %}"
-                        hx-target="#"
-                        hx-swap="#">Add Tags</button>
+                        hx-get="{% url 'tag_partials:attach_tag' exercise.id %}"
+                        hx-target="main"
+                        hx-swap="innerHTML">Add Tags</button>
+
                 <button class="outline secondary"
                         hx-get="{% url 'exercise:edit' exercise.id %}"
                         hx-target="closest #exercise-card"
                         hx-swap="outerHTML">Edit</button>
+
                 <button class="outline danger"
-                        hx-delete="{% url 'tag:destroy' exercise.id %}"
+                        hx-delete="{% url 'exercise:destroy' exercise.id %}"
                         hx-confirm="Are you sure? Will delete associated sets excercises"
-                        hx-target="closest #tag-card"
+                        hx-target="closest #exercise-card"
                         hx-swap="delete">Delete</button>
         </div>
 </article>
@@ -55,16 +65,19 @@
 
 
 {% partialdef tag %}
-<article class="exercise-tag">
+<article class="exercise-tag" id="exercise-tag">
         <p>{{ tag.name }}</p>
-        {% url 'exercise:destroy_tag' exercise.id tag.id as destroy_tag %}
-        {% include "../components/button.html" with url=destroy_tag label="Delete" %}
+        <button class="outline danger small"
+                hx-delete="{% url 'exercise:destroy_tag' exercise.id tag.id %}"
+                hx-swap="delete"
+                hx-target="closest #exercise-tag"
+        ></button>
 </article>
 {% endpartialdef %}
 
 
 {% partialdef exercise_create %}
-<article id="exercise-card" style="margin-top: 1rem">
+<article id="exercise-card-create" style="margin-top: 1rem">
         <h2>Create</h2>
         <form id="create-form">
                 <label>
@@ -83,12 +96,12 @@
         <div class="right">
                 <button class="outline secondary"
                         hx-delete="#"
-                        hx-target="closest #exercise-card"
+                        hx-target="closest #exercise-card-create"
                         hx-swap="delete">Cancel</button>
                 <button hx-post="{% url 'exercise:store' %}"
-                        hx-target="#exercise-list"
-                        hx-swap="afterend"
                         hx-include="previous #create-form"
+                        hx-target="closest #exercise-card-create"
+                        hx-swap="delete"
                         hx-swap="outerHTML">Save</button>
         </div>
 </article>

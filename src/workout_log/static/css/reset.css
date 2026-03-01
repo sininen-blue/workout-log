@@ -55,6 +55,11 @@ select {
   color: var(--pico-color-grey-400)
 }
 
+/* --- */
+
+button.small {
+  padding: 0.5rem;
+}
 
 /* --- */
 

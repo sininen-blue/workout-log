@@ -1,0 +1,34 @@
+{% partialdef tag_list inline %}
+<section id="exercise-list" 
+		hx-get="{% url 'exercise_partials:list' %}"
+		hx-target="this"
+		hx-swap="outerHTML"
+		hx-trigger="reload-list from:body"
+>
+		{% for tag in tags %}
+			<p>{{ tag.name }}</p>
+		{% endfor %}
+</section>
+{% endpartialdef %}
+
+{% partialdef attach_tag inline %}
+<section id="exercise-list" 
+		hx-get="{% url 'exercise_partials:list' %}"
+		hx-target="this"
+		hx-swap="outerHTML"
+		hx-trigger="reload-list from:body"
+>
+		TODO: list of of already existing tags here
+		{% for tag in tags %}
+			<article class="flex-apart">
+				<h3>{{ tag.name }}</h3>
+
+				<button
+					hx-post="{% url 'exercise:store_tag' exercise_id tag.id %}"
+					hx-target="main"
+					hx-swap="innerHTML"
+				>Add</button>
+			</article>
+		{% endfor %}
+</section>
+{% endpartialdef %}

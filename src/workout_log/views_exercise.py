@@ -46,7 +46,9 @@ def store(request: HttpRequest) -> HttpResponse:
         "exercise": exercise
     }
     if request.headers.get("HX-Request"):
-        return render(request, "exercise/index.html#exercise_card", context)
+        response: HttpResponse = render(request, "exercise/index.html#exercise_page", context)
+        response.headers.setdefault("HX-Trigger", "reload-list")
+        return response
 
     return redirect("exercise:index")
 

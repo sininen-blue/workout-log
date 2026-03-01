@@ -20,6 +20,7 @@ from django.urls import include, path
 urlpatterns = [
     path('', include('workout_log.urls')),
     path('exercise/', include('workout_log.urls_exercise')),
+    path('exercise_partials/', include('workout_log.urls_exercise_partials')),
     path('set/', include('workout_log.urls_set')),
     path('tag/', include('workout_log.urls_tag')),
     path('tag_partials/', include('workout_log.urls_tag_partials')),
