@@ -1,9 +1,10 @@
+from datetime import datetime, timedelta
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
 from django.db.models import QuerySet
 
-from .models import Exercise, Set
+from .models import Exercise, Set, Session
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -36,11 +37,37 @@ def store(request: HttpRequest) -> HttpResponse:
 
     exercise: Exercise = get_object_or_404(Exercise, pk=exercise_id)
 
+    current_datetime: datetime = datetime.now()
+    threshold_datetime: datetime = current_datetime - timedelta(hours=3.0)
+
+    session: Session = Session.objects.filter(
+        date__gte=threshold_datetime
+    ).exists()
+
+    print(session, "\n\n\n")
+
+    if not session:
+        try:
+            session = Session.objects.create(
+                notes="",
+            )
+        except Exception as e:
+            messages.error(request, "Session creation error: " + str(e))
+    else:
+        session = Session.objects.filter(
+            date__gte=threshold_datetime
+        ).first()
+
     try:
         Set.objects.create(
             exercise=exercise,
+            session=session,
+
             weight=weight,
-            reps=reps
+            reps=reps,
+
+            notes="",
+            rating=3,
         )
     except ValueError as v:
         messages.error(request, v)
