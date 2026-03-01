@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
@@ -37,7 +38,7 @@ def store(request: HttpRequest) -> HttpResponse:
 
     exercise: Exercise = get_object_or_404(Exercise, pk=exercise_id)
 
-    current_datetime: datetime = datetime.now()
+    current_datetime: datetime = timezone.now()
     threshold_datetime: datetime = current_datetime - timedelta(hours=3.0)
 
     session: Session = Session.objects.filter(
