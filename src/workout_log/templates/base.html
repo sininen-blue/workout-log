@@ -1,6 +1,6 @@
 {% load django_htmx %}
 <!DOCTYPE html>
-<html>
+<html data-theme="light">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,35 +20,67 @@
               sizes="16x16"
               href="{% static 'favicon/favicon-16x16.png' %}">
         <link rel="manifest" href="/site.webmanifest">
+
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+        >
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css"
+        >
+
         <link rel="stylesheet" href="{% static 'css/reset.css' %}">
-        <link rel="stylesheet" href="{% static 'css/output.css' %}">
+        <!-- <link rel="stylesheet" href="{% static 'css/output.css' %}"> -->
         <script defer src="{% static 'js/alpine3.15.8.js' %}"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
         {% htmx_script %}
     </head>
-    <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' class="bg-stone-100">
-        <nav class="relative">
-            <div class="absolute inset-x-0 top-0 h-3/4 bg-stone-600"></div>
-            <ul class="relative w-auto mx-4 mb-6 flex flex-row gap-4">
-                {% url 'day:index' as day_url %}
-                {% include "components/nav_button.html" with url=day_url label="Today" %}
-                {% url 'exercise:index' as exercise_url %}
-                {% include "components/nav_button.html" with url=exercise_url label="Exercises" %}
-                {% url 'tag:index' as tag_url %}
-                {% include "components/nav_button.html" with url=tag_url label="Tags" %}
-                {% url 'set:index' as set_url %}
-                {% include "components/nav_button.html" with url=set_url label="Sets" %}
-                {% url 'statistics:index' as statistics_url %}
-                {% include "components/nav_button.html" with url=statistics_url label="Stats" %}
-            </ul>
-        </nav>
-        <main class="flex flex-col items-stretch px-4 w-full">
-            {% if messages %}
+    <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
+        <header>
+            <div class="container">
+            <nav>
                 <ul>
-                    {% for message in messages %}
-                        <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                    {% endfor %}
+                    <li>
+                        <a hx-push-url="true" hx-target="main" hx-get="{% url 'day:index' %}">
+                            Today
+                        </a>
+                    </li>
                 </ul>
+                <ul>
+                    <li>
+                        <a hx-push-url="true" hx-target="main" hx-get="{% url 'exercise:index' %}">
+                            Exercises
+                        </a>
+                    </li>
+                    <li>
+                        <a hx-push-url="true" hx-target="main" hx-get="{% url 'tag:index' %}">
+                            Tags
+                        </a>
+                    </li>
+                    <li>
+                        <a hx-push-url="true" hx-target="main" hx-get="{% url 'set:index' %}">
+                            Sets
+                        </a>
+                    </li>
+                    <li>
+                        <a hx-push-url="true" hx-target="main" hx-get="{% url 'statistics:index' %}">
+                            Stats
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            </div>
+        </header>
+        <main class="container">
+            {% if messages %}
+                <article>
+                    <ul>
+                        {% for message in messages %}
+                            <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </article>
             {% endif %}
             {% block content %}{% endblock %}
         </main>

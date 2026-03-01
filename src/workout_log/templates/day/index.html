@@ -2,40 +2,49 @@
 {% block title %}Daily Log{% endblock %}
 {% block content %}
 	{% partialdef day_page inline %}
-    <h1 class="flex items-center justify-center text-xl font-bold p-2">{% now "F j, Y" %}</h1>
-    {% if tags %}
-        <ul class="flex flex-row flex-wrap w-full items-center justify-center gap-2 mb-2">
-            {% for tag in tags %}
-				{% partial highlighted_tag %}
-            {% endfor %}
-        </ul>
-    {% endif %}
-        <ul class="flex flex-col gap-2">
+        <h1>{% now "F j, Y" %}</h1>
+
+        <hr>
+
+        {% if tags %}
+            <div class="tag-holder"> 
+                {% for tag in tags %}
+                    {% partial highlighted_tag %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <hr>
+
+        <section>
             {% for set in sets %}
-				{% partial set_card %}
+                {% partial set_card %}
             {% endfor %}
-        </ul>
+        </section>
 	{% endpartialdef %}
 {% endblock %}
 
 
 {% partialdef highlighted_tag %}
-<li>
-	<a href="{% url 'tag:show' tag.id %}"
-	   class="bg-stone-200 p-1 w-40 h-40 flex items-center justify-center">{{ tag.name }}</a>
-</li>
+    <button
+        class="tag"
+        hx-get="{% url 'tag:show' tag.id %}"
+        hx-target="main"
+    >
+        {{ tag.name }}
+    </button>
 {% endpartialdef %}
 
 {% partialdef set_card %}
-<li class="flex flex-row justify-between">
-<div class="flex flex-row gap-2">
-	<p>{{ set.exercise.name }}</p>
-	<p>{{ set.weight }}</p>
-	<p>{{ set.reps }}</p>
-</div>
-<div class="flex flex-row gap-2">
-	<a href="{% url 'set:edit' set.id %}">Edit</a>
-	<a href="{% url 'set:destroy' set.id %}">Remove</a>
-</div>
-</li>
+<article class="flex-apart">
+    <div class="set-card-header">
+        <h3>{{ set.exercise.name }}</h3>
+        <p>{{ set.weight }}<sub class="subtle">kg</sub></p>
+        <p>{{ set.reps }}<sub class="subtle">reps</sub></p>
+    </div>
+    <div class="flex flex-row gap-2">
+        <button class="outline secondary" hx-put="{% url 'set:edit' set.id %}">Edit</button>
+        <button class="danger outline" hx-delete="{% url 'set:destroy' set.id %}">Remove</button>
+    </div>
+</article>
 {% endpartialdef %}
