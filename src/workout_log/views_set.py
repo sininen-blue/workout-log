@@ -1,3 +1,4 @@
+from itertools import groupby
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
@@ -19,13 +20,21 @@ def index(request: HttpRequest) -> HttpResponse:
 def create(request: HttpRequest, exercise_id: int) -> HttpResponse:
     exercise: Exercise = get_object_or_404(Exercise, pk=exercise_id)
 
-    latestSet: Set = Set.objects.order_by("-date")
-    latestSet = latestSet.filter(exercise=exercise)
-    latestSet = latestSet.first()
+    set_list: Set = Set.objects.order_by("-date").filter(exercise=exercise)
+    latestSet = set_list.first()
+
+    latest_sets = set_list[:10]
+    grouped_sets = []
+    for day, sets in groupby(latest_sets, key=lambda s: s.date.date()):
+        grouped_sets.append({
+            "date": day,
+            "sets": list(sets),
+        })
 
     context: dict[str, object] = {
         "exercise": exercise,
-        "latestSet": latestSet
+        "latestSet": latestSet,
+        "latestSets": grouped_sets
     }
     return render(request, "set/create.html", context)
 
