@@ -31,6 +31,7 @@
     --text-4xl--line-height: calc(2.5 / 2.25);
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
+    --radius-sm: 0.25rem;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
@@ -210,23 +211,14 @@
   .mx-4 {
     margin-inline: calc(var(--spacing) * 4);
   }
-  .mx-auto {
-    margin-inline: auto;
-  }
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
   }
   .mt-4 {
     margin-top: calc(var(--spacing) * 4);
   }
-  .mt-6 {
-    margin-top: calc(var(--spacing) * 6);
-  }
   .mb-2 {
     margin-bottom: calc(var(--spacing) * 2);
-  }
-  .mb-4 {
-    margin-bottom: calc(var(--spacing) * 4);
   }
   .mb-6 {
     margin-bottom: calc(var(--spacing) * 6);
@@ -246,6 +238,9 @@
   .table {
     display: table;
   }
+  .h-2 {
+    height: calc(var(--spacing) * 2);
+  }
   .h-3 {
     height: calc(var(--spacing) * 3);
   }
@@ -263,6 +258,9 @@
   }
   .h-40 {
     height: calc(var(--spacing) * 40);
+  }
+  .w-2 {
+    width: calc(var(--spacing) * 2);
   }
   .w-20 {
     width: calc(var(--spacing) * 20);
@@ -309,8 +307,8 @@
   .justify-center {
     justify-content: center;
   }
-  .gap-0 {
-    gap: calc(var(--spacing) * 0);
+  .justify-start {
+    justify-content: flex-start;
   }
   .gap-1 {
     gap: calc(var(--spacing) * 1);
@@ -321,19 +319,15 @@
   .gap-4 {
     gap: calc(var(--spacing) * 4);
   }
+  .rounded {
+    border-radius: 0.25rem;
+  }
+  .rounded-sm {
+    border-radius: var(--radius-sm);
+  }
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
-  }
-  .border-r-1 {
-    border-right-style: var(--tw-border-style);
-    border-right-width: 1px;
-  }
-  .border-stone-400 {
-    border-color: var(--color-stone-400);
-  }
-  .bg-black {
-    background-color: var(--color-black);
   }
   .bg-stone-100 {
     background-color: var(--color-stone-100);
@@ -353,14 +347,8 @@
   .bg-stone-600 {
     background-color: var(--color-stone-600);
   }
-  .bg-stone-700 {
-    background-color: var(--color-stone-700);
-  }
   .bg-stone-800 {
     background-color: var(--color-stone-800);
-  }
-  .bg-stone-900 {
-    background-color: var(--color-stone-900);
   }
   .p-1 {
     padding: calc(var(--spacing) * 1);
@@ -373,9 +361,6 @@
   }
   .px-4 {
     padding-inline: calc(var(--spacing) * 4);
-  }
-  .pr-2 {
-    padding-right: calc(var(--spacing) * 2);
   }
   .text-4xl {
     font-size: var(--text-4xl);
@@ -393,10 +378,6 @@
     font-size: var(--text-xl);
     line-height: var(--tw-leading, var(--text-xl--line-height));
   }
-  .text-xs {
-    font-size: var(--text-xs);
-    line-height: var(--tw-leading, var(--text-xs--line-height));
-  }
   .font-bold {
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
@@ -404,9 +385,6 @@
   .font-semibold {
     --tw-font-weight: var(--font-weight-semibold);
     font-weight: var(--font-weight-semibold);
-  }
-  .text-stone-400 {
-    color: var(--color-stone-400);
   }
   .text-stone-600 {
     color: var(--color-stone-600);

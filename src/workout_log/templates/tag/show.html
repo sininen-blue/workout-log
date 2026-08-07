@@ -3,24 +3,41 @@
 {% block content %}
     <h1 class="mb-2 text-lg font-semibold">{{ tag.name }}</h1>
     <p>{{ tag.notes }}</p>
+
     <ul class="flex flex-col gap-2">
-        {% for exercise in tag.exercises.all %}
-            <li class="bg-stone-200 flex flex-row items-center justify-between p-2">
-                <div class="flex flex-col gap-2">
-                    <p class="text-lg">{{ exercise.name }}</p>
-                    <p>{{ exercise.notes }}</p>
-                    <ul class="flex flex-row gap-2">
-                        {% for tag in exercise.tags.all %}
-                            <li>
-                                {% url 'tag:show' tag.id as tag_show %}
-                                {% include 'components/button.html' with url=tag_show label=tag.name %}
-                            </li>
+
+    {% for group in grouped_exercise %}
+    <div>
+        <li class="bg-stone-200 flex flex-row items-center justify-between p-2">
+            <div class="flex flex-col gap-2">
+                <div class="flex flex-row gap-2 justify-start items-center">
+                    <p class="text-lg">{{ group.exercise.name }}</p>
+
+                    <section class="flex flex-row gap-2 items-center">
+                        {% for i in group.done_count %}
+                            <div class="w-2 h-2 bg-stone-500"></div>
                         {% endfor %}
-                    </ul>
+                    </section>
                 </div>
-                <a href="{% url 'set:create' exercise.id %}"
-                   class="bg-stone-100 flex items-center justify-center h-20 w-20">Add Set</a>
-            </li>
-        {% endfor %}
+                <p>{{ group.exercise.notes }}</p>
+
+                <ul class="flex flex-row gap-2">
+                    {% for tag in group.tags %}
+                        <li>
+                            {% url 'tag:show' tag.id as tag_show %}
+                            {% include 'components/button.html' with url=tag_show label=tag.name %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <a href="{% url 'set:create' group.exercise.id %}"
+               class="bg-stone-100 flex items-center justify-center h-20 w-20">Add Set</a>
+        </li>
+    </div>
+    {% endfor %}
+
+
+
+
     </ul>
 {% endblock %}
