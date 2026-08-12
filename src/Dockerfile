@@ -1,28 +1,30 @@
 FROM python:3.13-slim AS builder
 
-RUN mkdir /app
 WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-RUN pip install --upgrade pip
+# Install uv (the project uses uv.lock, not requirements.txt)
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+COPY pyproject.toml uv.lock ./
+# Install locked dependencies into a venv (skip the project itself, source is copied later)
+RUN uv sync --frozen --no-dev --no-install-project
 
 FROM python:3.13-slim
 
 RUN mkdir -p /app
 WORKDIR /app
 
-COPY --from=builder /usr/local/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages/
-COPY --from=builder /usr/local/bin/ /usr/local/bin/
-
-COPY . .
-
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+
+# Copy the venv from the builder stage
+COPY --from=builder /app/.venv /app/.venv
+ENV PATH="/app/.venv/bin:$PATH"
+
+COPY . .
 
 RUN chmod +x /app/entrypoint.sh
 
