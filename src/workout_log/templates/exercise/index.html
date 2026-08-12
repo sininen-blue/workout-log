@@ -3,25 +3,35 @@
 {% block content %}
     {% url 'exercise:create' as create %}
     {% include "../components/button.html" with url=create label="Create" %}
+
     {% if exercises %}
-        <ul class="flex flex-col gap-2 mt-2">
+        <ul class="flex flex-col gap-2 mt-2 w-full">
             {% for exercise in exercises %}
-                <li class="bg-stone-200 p-4 flex flex-row justify-between">
-                    <section class="flex flex-row gap-2">
-                        <div class="flex flex-col">
-                            <a class="text-lg p-2" href="{% url 'exercise:show' exercise.id %}">{{ exercise.name }}</a>
-                            <p>{{ exercise.notes }}</p>
+                <li class="bg-stone-200 p-4 flex flex-row justify-between gap-8">
+                    <div class="flex flex-col justify-between">
+                        <div>
+                            <a class="text-lg font-semibold text-stone-600" href="{% url 'exercise:show' exercise.id %}">{{ exercise.name }}</a>
+                            <p class="mt-1">{{ exercise.notes }}</p>
                         </div>
-                        <ul>
+
+                        <ul class="flex flex-row gap-2 items-center">
                             {% for tag in exercise.tags.all %}
-                                <li class="p-2 bg-stone-400 flex items-center justify-between gap-2">
-                                    <p>{{ tag.name }}</p>
-                                    {% url 'exercise:destroy_tag' exercise.id tag.id as destroy_tag %}
-                                    {% include "../components/button.html" with url=destroy_tag label="Delete" %}
+                                <li id="exercise-tag-{{tag.id}}">
+                                    <a 
+                                        class="underline"
+                                        hx-confirm="Are you sure you want to remove this tag?"
+                                        hx-delete="{% url 'exercise:destroy_tag' exercise.id tag.id %}" 
+                                        hx-swap="delete"
+                                        hx-target="#exercise-tag-{{tag.id}}"
+                                    >
+                                        {{ tag.name }}
+                                    </a>
                                 </li>
+                            {% if not forloop.last %}<div class="w-1 h-2 bg-stone-400"></div>{% endif %}
                             {% endfor %}
                         </ul>
-                    </section>
+                    </div>
+
                     <div class="flex flex-col gap-1">
                         <a class="h-12 flex items-center justify-center"
                            href="{% url 'exercise:create_tag' exercise.id %}">Add Tags</a>

@@ -1,3 +1,4 @@
+from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
@@ -114,6 +115,7 @@ def store_tag(request: HttpRequest, exercise_id: int, tag_id: int) -> HttpRespon
     return redirect("exercise:index")
 
 
+@require_http_methods(["DELETE"])
 def destroy_tag(request: HttpRequest, exercise_id: int, tag_id: int) -> HttpResponse:
     exerciseTagMap: ExerciseTagMap = get_object_or_404(
         ExerciseTagMap, exercise=exercise_id, tag=tag_id)
