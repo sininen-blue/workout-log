@@ -1,13 +1,43 @@
 {% extends 'base.html' %}
 {% block title %}Add Tag{% endblock %}
 {% block content %}
-    <h1>{{ exercise.name }}</h1>
-    {% if tags %}
-        <ul>
-            {% for tag in tags %}
-                <li>
-                    <p>{{ tag.name }}</p>
-                    <a href="{% url 'exercise:store_tag' exercise.id tag.id %}">Add</a>
+    <!-- TODO: make this so that when you submit, it will stay on the same page -->
+    <!-- via htmx -->
+    <h1 class="font-semibold text-2xl text-stone-600">{{ exercise.name }}</h1>
+
+    <h2 class="font-semibold text-xl text-stone-600">Current Tags</h2>
+    {% if exercise_tags %}
+        <ul class="flex flex-col gap-2 items-center">
+            {% for tag in exercise_tags %}
+                <li id="exercise-tag-{{tag.id}}" class="w-full">
+                    <a 
+                        class="bg-stone-200 p-4 w-full flex justify-center items-center w-full" 
+                        hx-confirm="are you sure you want to remove this tag?"
+                        hx-delete="{% url 'exercise:destroy_tag' exercise.id tag.id %}"
+                        hx-swap="delete"
+                        hx-target="#exercise-tag-{{tag.id}}">
+                        {{ tag.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>This exercise has no tags</p>
+    {% endif %}
+
+
+    <div class="h-1 w-full bg-stone-200 my-4"></div>
+
+    <h2 class="font-semibold text-xl text-stone-600">Available Tags</h2>
+    {% if available_tags %}
+        <ul class="flex flex-col gap-2 items-center">
+            {% for tag in available_tags %}
+                <li class="w-full">
+                    <a 
+                        class="bg-stone-200 p-4 w-full flex justify-center items-center w-full" 
+                        href="{% url 'exercise:store_tag' exercise.id tag.id %}">
+                        {{ tag.name }}
+                    </a>
                 </li>
             {% endfor %}
         </ul>

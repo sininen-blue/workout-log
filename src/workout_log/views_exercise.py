@@ -85,11 +85,13 @@ def destroy(request: HttpRequest, exercise_id: int) -> HttpResponse:
 
 def create_tag(request: HttpRequest, exercise_id: int) -> HttpResponse:
     exercise: Exercise = get_object_or_404(Exercise, pk=exercise_id)
-    tags: Tag = Tag.objects.all()
+    exercise_tags: Tag = exercise.tags.all()
+    available_tags: Tag = Tag.objects.exclude(exercises=exercise).all()
 
     context: dict[str, object] = {
         "exercise": exercise,
-        "tags": tags
+        "exercise_tags": exercise_tags,
+        "available_tags": available_tags
     }
 
     return render(request, "exercise/create_tag.html", context)
