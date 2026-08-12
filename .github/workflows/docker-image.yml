@@ -25,7 +25,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: sininen-blue/workout-log
+          images: sininenblue/workout-log
           tags: |
             type=sha,prefix=,format=short
             type=raw,value=latest
