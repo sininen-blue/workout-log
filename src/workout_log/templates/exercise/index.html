@@ -7,7 +7,8 @@
     {% if exercises %}
         <ul class="flex flex-col gap-2 mt-2 w-full">
             {% for exercise in exercises %}
-                <li class="bg-stone-200 p-4 flex flex-row justify-between gap-8">
+                <li id="exercise-{{ exercise.id }}"
+                    class="bg-stone-200 p-4 flex flex-row justify-between gap-8">
                     <div class="flex flex-col justify-between">
                         <div>
                             <a class="text-lg font-semibold text-stone-600" href="{% url 'exercise:show' exercise.id %}">{{ exercise.name }}</a>
@@ -37,8 +38,15 @@
                            href="{% url 'exercise:create_tag' exercise.id %}">Add Tags</a>
                         <a class="h-12 flex items-center justify-center"
                            href="{% url 'exercise:edit' exercise.id %}">Edit</a>
-                        <a class="h-12 flex items-center justify-center"
-                           href="{% url 'exercise:destroy' exercise.id %}">Delete</a>
+                        <a 
+                            class="h-12 flex items-center justify-center"
+                            hx-target="#exercise-{{ exercise.id }}"
+                            hx-swap="delete"
+                            hx-confirm="Are you sure you want to delete this exercise? this will also delete all the sets associated with it"
+                            hx-delete="{% url 'exercise:destroy' exercise.id %}"
+                            >
+                                Delete
+                        </a>
                     </div>
                 </li>
             {% endfor %}
