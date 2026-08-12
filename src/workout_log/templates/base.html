@@ -24,10 +24,10 @@
         <script defer src="{% static 'js/alpine3.15.8.js' %}"></script>
         <script defer src="{% static 'js/htmx2.0.8.js' %}"></script>
     </head>
-    <body hx-boost="true" class="bg-stone-100">
-        <nav class="relative">
-            <div class="absolute inset-x-0 top-0 h-3/4 bg-stone-600"></div>
-            <ul class="relative w-auto mx-4 mb-6 flex flex-row gap-4">
+    <body class="bg-stone-100 flex flex-col items-center w-full">
+        <nav class="relative w-full mb-4">
+            <div class="absolute inset-x-0 top-0 h-1/2 bg-stone-600"></div>
+            <ul class="relative flex flex-row justify-center items-center gap-4">
                 {% url 'day:index' as day_url %}
                 {% include "components/nav_button.html" with url=day_url label="Today" %}
                 {% url 'exercise:index' as exercise_url %}
@@ -38,14 +38,16 @@
                 {% include "components/nav_button.html" with url=set_url label="Sets" %}
             </ul>
         </nav>
-        <main class="flex flex-col items-stretch px-4 w-full">
-            {% if messages %}
-                <ul>
-                    {% for message in messages %}
-                        <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
+        <main class="flex flex-col items-center max-w-5xl mx-4">
+            <section class="bg-stone-300">
+                {% if messages %}
+                    <ul class="">
+                        {% for message in messages %}
+                            <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </section>
             {% block content %}{% endblock %}
         </main>
     </body>
